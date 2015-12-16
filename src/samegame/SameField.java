@@ -42,9 +42,11 @@ public class SameField extends JPanel {
 	 */
 	public void changeColor(int colorNum) {
 		this.colorNum = colorNum;
-		key = urlList[this.colorNum];
-		bi = Variables.getPicturecache().get(key);
-		getFigure();
+		if(!this.isEmpty()) {
+			key = urlList[this.colorNum];
+			bi = Variables.getPicturecache().get(key);
+			getFigure();
+		}
 	}
 	
 	/**

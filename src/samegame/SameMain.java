@@ -33,6 +33,8 @@ public class SameMain {
 	private SameField[][] gameArr = new SameField[size[0]][size[1]];
 	/**Eine Liste von Steinen, welche durch Benutzerklick entfernt wird*/
 	private ArrayList<Point> removableStones = new ArrayList<Point>();
+	/**Anzahl der Punkte im aktuellen Spiel*/
+	private int points = 0;
 	
 	public SameMain() {
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,8 +52,10 @@ public class SameMain {
 				gameArr[x][y] = new SameField(new Random().nextInt(5));
 				gameArr[x][y].addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
-						findRemovableStones(x1,y1);
-						removeStones();
+						if(!gameArr[x1][y1].isEmpty()) {
+							findRemovableStones(x1,y1);
+							removeStones();
+						}
 					}
 				});
 				frame1.add(gameArr[x][y]);
@@ -81,11 +85,10 @@ public class SameMain {
         }
 	}
 	
-	//TODO
 	/**
-	 * 
-	 * @param x
-	 * @param y
+	 * Diese Methode ermittelt alle Steine, die entfernbar sind, weil sie gleichfarbige Nachbaren haben.
+	 * @param x x-Koordinate des Steins
+	 * @param y y-Koordinate des Steins
 	 */
 	private void findRemovableStones(int x, int y) {
 		int[][] dirArr = {{-1,0},{1,0},{0,-1},{0,1}};
@@ -101,14 +104,17 @@ public class SameMain {
 		}
 	}
 	
-	//TODO
 	/**
-	 *
+	 * Diese Methode entfernt alle Steine des ausgewaehlten Blocks und fuegt eine entsprechende Punktzahl hinzu.
 	 */
 	private void removeStones() {
 		for(Point p:removableStones) {
 			gameArr[p.x][p.y].setEmpty(true);
+			gameArr[p.x][p.y].changeColor(-1);
 		}
+		int num = removableStones.size();
+		int add = (int)Math.ceil(num*(1+(num*0.4)));
+		points += add;
 		removableStones.clear();
 	}
 
