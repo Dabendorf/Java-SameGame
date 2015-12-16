@@ -26,6 +26,7 @@ public class SameField extends JPanel {
 	private String key;
 	/**Aktuell anzuzeigendes Bildobjekt*/
 	private BufferedImage bi;
+	private boolean empty = false;
 
 	public SameField(int colorNum) {
 		changeColor(colorNum);
@@ -49,20 +50,41 @@ public class SameField extends JPanel {
 	/**
 	 * Diese Methode generiert die anzuzeigende Figur der Zelle neu.
 	 */
-	public void getFigure() {
-		if(Variables.isWithImages()) {
-			this.setBackground(new Color(0x0f6c91));
-			this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
-		} else {
-			this.setBackground(colorList[colorNum]);
-			this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
+	private void getFigure() {
+		if(!this.isEmpty()) {
+			if(Variables.isWithImages()) {
+				this.setBackground(new Color(0x0f6c91));
+				this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
+			} else {
+				this.setBackground(colorList[colorNum]);
+				this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
+			}
 		}
 	}
 	
 	public void paintComponent(Graphics gr) {
 		super.paintComponent(gr);
-		if(Variables.isWithImages()) {
-			gr.drawImage(bi, 0, 0, getWidth(), getHeight(), null);
+		if(!this.isEmpty()) {
+			if(Variables.isWithImages()) {
+				gr.drawImage(bi, 0, 0, getWidth(), getHeight(), null);
+			}
+		} else if(!Variables.isWithImages()) {
+			gr.clearRect(0, 0, getWidth(), getHeight());
 		}
+	}
+	
+	public boolean isEmpty() {
+		return empty;
+	}
+
+	/**
+	 * Diese Methode leert ein einzelnes Feld oder gibt ihm eine Farbe zurueck.
+	 * @param empty Boolean, ob geleert oder gefuellt wird.
+	 */
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
+		this.repaint();
+		this.removeAll();
+		this.updateUI();
 	}
 }

@@ -31,7 +31,7 @@ public class SameMain {
 	private int[] size = {20, 12};
 	/**Array aller Spielzellen*/
 	private SameField[][] gameArr = new SameField[size[0]][size[1]];
-	/***/ //TODO
+	/**Eine Liste von Steinen, welche durch Benutzerklick entfernt wird*/
 	private ArrayList<Point> removableStones = new ArrayList<Point>();
 	
 	public SameMain() {
@@ -50,7 +50,8 @@ public class SameMain {
 				gameArr[x][y] = new SameField(new Random().nextInt(5));
 				gameArr[x][y].addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
-						removeStones(x1,y1);
+						findRemovableStones(x1,y1);
+						removeStones();
 					}
 				});
 				frame1.add(gameArr[x][y]);
@@ -81,14 +82,34 @@ public class SameMain {
 	}
 	
 	//TODO
-	private void removeStones(int x, int y) {
-		for(int y2=0;y2<size[1];y2++) {
-			for(int x2=0;x2<size[0];x2++) {
-				gameArr[x2][y2].changeColor(new Random().nextInt(5));
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	private void findRemovableStones(int x, int y) {
+		int[][] dirArr = {{-1,0},{1,0},{0,-1},{0,1}};
+		for(int[] dir:dirArr) {
+			if(!removableStones.contains(new Point(x+dir[0],y+dir[1]))) {
+				try {
+					if(gameArr[x][y].getColorNum()==gameArr[x+dir[0]][y+dir[1]].getColorNum()) {
+						removableStones.add(new Point(x+dir[0],y+dir[1]));
+						findRemovableStones(x+dir[0],y+dir[1]);
+					}
+				} catch(ArrayIndexOutOfBoundsException ae) {}
 			}
 		}
-		//System.out.println("Gattööse");
-		//int[] dirX = s
+	}
+	
+	//TODO
+	/**
+	 *
+	 */
+	private void removeStones() {
+		for(Point p:removableStones) {
+			gameArr[p.x][p.y].setEmpty(true);
+		}
+		removableStones.clear();
 	}
 
 	public static void main(String[] args) {
