@@ -26,7 +26,6 @@ public class SameField extends JPanel {
 	private String key;
 	/**Aktuell anzuzeigendes Bildobjekt*/
 	private BufferedImage bi;
-	private boolean empty = false;
 
 	public SameField(int colorNum) {
 		changeColor(colorNum);
@@ -34,6 +33,11 @@ public class SameField extends JPanel {
 	
 	public int getColorNum() {
 		return colorNum;
+	}
+	
+	public void setColorNum(int colorNum) {
+		changeColor(colorNum);
+		this.repaint();
 	}
 	
 	/**
@@ -76,7 +80,11 @@ public class SameField extends JPanel {
 	}
 	
 	public boolean isEmpty() {
-		return empty;
+		if(colorNum==-1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -84,7 +92,9 @@ public class SameField extends JPanel {
 	 * @param empty Boolean, ob geleert oder gefuellt wird.
 	 */
 	public void setEmpty(boolean empty) {
-		this.empty = empty;
+		if(empty==true) {
+			colorNum=-1;
+		}
 		this.repaint();
 		this.removeAll();
 		this.updateUI();

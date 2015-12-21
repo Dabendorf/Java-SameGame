@@ -55,6 +55,7 @@ public class SameMain {
 						if(!gameArr[x1][y1].isEmpty()) {
 							findRemovableStones(x1,y1);
 							removeStones();
+							moveUp();
 						}
 					}
 				});
@@ -110,12 +111,28 @@ public class SameMain {
 	private void removeStones() {
 		for(Point p:removableStones) {
 			gameArr[p.x][p.y].setEmpty(true);
-			gameArr[p.x][p.y].changeColor(-1);
+			//gameArr[p.x][p.y].changeColor(-1);
 		}
 		int num = removableStones.size();
 		int add = (int)Math.ceil(num*(1+(num*0.4)));
 		points += add;
 		removableStones.clear();
+	}
+	
+	/**
+	 * Diese Methode laesst die Steine ueber und bei freien Spalten rechts neben leeren Steinen nachruecken.
+	 */
+	private void moveUp() {
+		for(int x=0;x<size[0];x++) {
+			for(int y=size[1]-1;y>0;y--) {
+				if(gameArr[x][y].isEmpty() && y>0) {
+					for(int a=y;a>0;a--) {
+						
+					}
+					gameArr[x][0].setEmpty(true);
+				}
+			}
+		}
 	}
 
 	public static void main(String[] args) {
