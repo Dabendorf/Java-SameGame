@@ -60,6 +60,7 @@ public class SameMain {
 							moveDown();
 							moveLeft();
 							removableStones.clear();
+							showPrognosedPoints();
 							frame1.revalidate();
 							frame1.repaint();
 						}
@@ -68,6 +69,7 @@ public class SameMain {
 				frame1.add(gameArr[x][y]);
 			}
 		}
+		showPrognosedPoints();
 		
 		frame1.pack();
 		frame1.setLocationRelativeTo(null);
@@ -119,9 +121,7 @@ public class SameMain {
 		for(Point p:removableStones) {
 			gameArr[p.x][p.y].setEmpty();
 		}
-		int num = removableStones.size();
-		int add = (int)Math.ceil(num*(1+(num*0.4)));
-		points += add;
+		points += getPrognosedPoints();
 		
 		Comparator<Point> comp = new Comparator<Point>() {
 			@Override
@@ -186,6 +186,38 @@ public class SameMain {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Diese Methode setzt fuer alle nicht-leeren Felder die durch Anklicken erreichbare Punktzahl als ToolTipText.
+	 * Wenn kein Feld mehr eine Punktzahl erreichen koennte, also alle Figuren nur noch einzeln vorkommen, wird das Spiel beendet.
+	 */
+	private void showPrognosedPoints() {
+		boolean gameEnd = true;
+		for(int y=0;y<size[1];y++) {
+			for(int x=0;x<size[0];x++) {
+				if(!gameArr[x][y].isEmpty()) {
+					findRemovableStones(x,y);
+					if(getPrognosedPoints()>0) {
+						gameEnd = false;
+					}
+					gameArr[x][y].setToolTipText("Punkteprognose: "+String.valueOf(getPrognosedPoints()));
+					removableStones.clear();
+				}
+			}
+		}
+		if(gameEnd) {
+			System.err.println("Das Spiel ist vorbei");
+		}
+	}
+	
+	/**
+	 * Diese Methode gitb die Anzahl an Punkten zurueck, die beim Klick erreicht wird oder wurde.
+	 */
+	private int getPrognosedPoints() {
+		int num = removableStones.size();
+		int add = (int)Math.ceil(num*(1+(num*0.4)));
+		return add;
 	}
 
 	public static void main(String[] args) {
