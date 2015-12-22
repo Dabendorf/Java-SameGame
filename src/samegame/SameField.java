@@ -79,6 +79,10 @@ public class SameField extends JPanel {
 		}
 	}
 	
+	/**
+	 * Diese Methode ueberprueft, ob dem Feld keine echte Farbe, also -1 als Wert zugeordnet ist.
+	 * @return Gibt Zustand zurueck
+	 */
 	public boolean isEmpty() {
 		if(colorNum==-1) {
 			return true;
@@ -89,12 +93,10 @@ public class SameField extends JPanel {
 
 	/**
 	 * Diese Methode leert ein einzelnes Feld oder gibt ihm eine Farbe zurueck.
-	 * @param empty Boolean, ob geleert oder gefuellt wird.
+	 * @param empty Boolean, ob geleert oder gefuellt wird
 	 */
-	public void setEmpty(boolean empty) {
-		if(empty==true) {
-			colorNum=-1;
-		}
+	public void setEmpty() {
+		colorNum=-1;
 		this.repaint();
 		this.removeAll();
 		this.updateUI();

@@ -19,7 +19,7 @@ public class Variables {
 	/**Boolean, ob der Spieler mit Bildern oder Farbigen Feldern spielen moechte*/
 	private static boolean withImages = true;
 	/**Liste von Pfaden zu den Bildern des Spiels*/
-	private static String[] urlList = {"./banana.png", "./apple.png", "./strawberry.png", "./plum.png", "./orange.png"};
+	private static String[] urlList = {"banana.png", "apple.png", "strawberry.png", "plum.png", "orange.png"};
 
 	public static Map<String, BufferedImage> getPicturecache() {
 		return picturecache;

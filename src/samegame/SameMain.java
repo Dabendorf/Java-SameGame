@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -55,7 +57,11 @@ public class SameMain {
 						if(!gameArr[x1][y1].isEmpty()) {
 							findRemovableStones(x1,y1);
 							removeStones();
-							moveUp();
+							moveDown();
+							moveLeft();
+							removableStones.clear();
+							frame1.revalidate();
+							frame1.repaint();
 						}
 					}
 				});
@@ -79,7 +85,8 @@ public class SameMain {
     	for(String str:urlList) {
         	try {
         		key = str;
-                URL url = new URL(BaseURL.getJarBase(SameMain.class), key);
+                //URL url = new URL(BaseURL.getJarBase(SameMain.class), "./alternativepictures/"+key);
+        		URL url = new URL(BaseURL.getJarBase(SameMain.class), key);
                 bi = ImageIO.read(url);
                 Variables.getPicturecache().put(key, bi); 
             } catch (MalformedURLException e) {} catch (IOException e) {}
@@ -110,26 +117,72 @@ public class SameMain {
 	 */
 	private void removeStones() {
 		for(Point p:removableStones) {
-			gameArr[p.x][p.y].setEmpty(true);
-			//gameArr[p.x][p.y].changeColor(-1);
+			gameArr[p.x][p.y].setEmpty();
 		}
 		int num = removableStones.size();
 		int add = (int)Math.ceil(num*(1+(num*0.4)));
 		points += add;
-		removableStones.clear();
+		
+		Comparator<Point> comp = new Comparator<Point>() {
+			@Override
+			public int compare(Point o1, Point o2) {
+				int a = new Integer(o1.x).compareTo(o2.x);
+				if(a==0) {
+					a =  new Integer(o2.y).compareTo(o1.y);
+				}
+				return a;
+			}
+		};
+		Collections.sort(removableStones, comp);
 	}
 	
 	/**
-	 * Diese Methode laesst die Steine ueber und bei freien Spalten rechts neben leeren Steinen nachruecken.
+	 * Diese Methode laesst die Steine ueber leeren Steinen nachruecken.
 	 */
-	private void moveUp() {
+	private void moveDown() {
+		for(int i=0;i<removableStones.size();i++) {
+			for(int a=removableStones.get(i).y;a>0;a--) {
+				gameArr[removableStones.get(i).x][a].setColorNum(gameArr[removableStones.get(i).x][a-1].getColorNum());
+			}
+			gameArr[removableStones.get(i).x][0].setEmpty();
+			for(int j=i+1;j<removableStones.size();j++) {
+				if(removableStones.get(i).x==removableStones.get(j).x) {
+					removableStones.get(j).setLocation(removableStones.get(j).x, removableStones.get(j).y+1);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Diese Methode laesst bei leeren Spalten alles rechts davon nach links aufruecken.
+	 */
+	private void moveLeft() {
+		ArrayList<Integer> emptyColumns = new ArrayList<Integer>();
 		for(int x=0;x<size[0];x++) {
-			for(int y=size[1]-1;y>0;y--) {
-				if(gameArr[x][y].isEmpty() && y>0) {
-					for(int a=y;a>0;a--) {
-						
-					}
-					gameArr[x][0].setEmpty(true);
+			boolean empty = true;
+			for(int y=0;y<size[1];y++) {
+				if(!gameArr[x][y].isEmpty()) {
+					empty = false;
+					break;
+				}
+			}
+			if(empty) {
+				emptyColumns.add(x);
+			}
+		}
+		
+		for(int i=0;i<emptyColumns.size();i++) {
+			for(int x=emptyColumns.get(i)-i;x<size[0]-1;x++) {
+				for(int y=0;y<size[1];y++) {
+					gameArr[x][y].setColorNum(gameArr[x+1][y].getColorNum());
+				}
+			}
+		}
+		
+		if(emptyColumns.size()>0) {
+			for(int y=0;y<size[1];y++) {
+				for(int x=size[0]-emptyColumns.size();x<size[0];x++) {
+					gameArr[x][y].setEmpty();
 				}
 			}
 		}
