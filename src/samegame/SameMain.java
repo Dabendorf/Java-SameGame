@@ -17,6 +17,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * Dies ist die Hauptklasse vom SameGame-Spiel, welche den Spielablauf steuert und die graphische Oberflaeche laedt.
@@ -61,6 +62,7 @@ public class SameMain {
 							moveLeft();
 							removableStones.clear();
 							showPrognosedPoints();
+							frame1.setTitle("SameGame; Punkte:"+points);
 							frame1.revalidate();
 							frame1.repaint();
 						}
@@ -105,7 +107,7 @@ public class SameMain {
 		for(int[] dir:dirArr) {
 			if(!removableStones.contains(new Point(x+dir[0],y+dir[1]))) {
 				try {
-					if(gameArr[x][y].getColorNum()==gameArr[x+dir[0]][y+dir[1]].getColorNum()) {
+					if(gameArr[x][y].getColorNum()==gameArr[x+dir[0]][y+dir[1]].getColorNum() && !gameArr[x][y].isEmpty()) {
 						removableStones.add(new Point(x+dir[0],y+dir[1]));
 						findRemovableStones(x+dir[0],y+dir[1]);
 					}
@@ -196,17 +198,16 @@ public class SameMain {
 		boolean gameEnd = true;
 		for(int y=0;y<size[1];y++) {
 			for(int x=0;x<size[0];x++) {
-				if(!gameArr[x][y].isEmpty()) {
-					findRemovableStones(x,y);
-					if(getPrognosedPoints()>0) {
-						gameEnd = false;
-					}
-					gameArr[x][y].setToolTipText("Punkteprognose: "+String.valueOf(getPrognosedPoints()));
-					removableStones.clear();
+				findRemovableStones(x,y);
+				if(getPrognosedPoints()>0) {
+					gameEnd = false;
 				}
+				gameArr[x][y].setToolTipText("Punkteprognose: "+String.valueOf(getPrognosedPoints()));
+				removableStones.clear();
 			}
 		}
 		if(gameEnd) {
+			JOptionPane.showMessageDialog(null, "Das Spiel ist vorbei.\nDu hast "+points+" Punkte erreicht.", "Spielende", JOptionPane.PLAIN_MESSAGE);
 			System.err.println("Das Spiel ist vorbei");
 		}
 	}
@@ -216,7 +217,7 @@ public class SameMain {
 	 */
 	private int getPrognosedPoints() {
 		int num = removableStones.size();
-		int add = (int)Math.ceil(num*(1+(num*0.4)));
+		int add = (int)Math.ceil(num*(1+(num*0.4))); //0.4*num*num+num
 		return add;
 	}
 
