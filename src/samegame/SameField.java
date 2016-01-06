@@ -38,6 +38,8 @@ public class SameField extends JPanel {
 	public void setColorNum(int colorNum) {
 		changeColor(colorNum);
 		this.repaint();
+		this.removeAll();
+		this.updateUI();
 	}
 	
 	/**

@@ -4,6 +4,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -16,8 +20,15 @@ import java.util.Comparator;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 
 /**
  * Dies ist die Hauptklasse vom SameGame-Spiel, welche den Spielablauf steuert und die graphische Oberflaeche laedt.
@@ -28,8 +39,10 @@ import javax.swing.JOptionPane;
  */
 public class SameMain {
 	
+	/**Sammlung von Sprach-Strings*/
+	private Language lang = new Language();
 	/**Programmfenster des Spiels*/
-	private JFrame frame1 = new JFrame("SameGame");
+	private JFrame frame1 = new JFrame(lang.programname);
 	/**Anzahl der Spielelemente nach Laenge und Breite*/
 	private int[] size = {20, 12};
 	/**Array aller Spielzellen*/
@@ -38,13 +51,21 @@ public class SameMain {
 	private ArrayList<Point> removableStones = new ArrayList<Point>();
 	/**Anzahl der Punkte im aktuellen Spiel*/
 	private int points = 0;
+	/**Persoenliche Programmeinstellungen*/
+	//private Settings settings = new Settings(); //TODO Wird das gebraucht?
 	
 	public SameMain() {
+		sysWin();
+		loadFrame();
+	}
+	
+	private void loadFrame() {
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame1.setPreferredSize(new Dimension(45*size[0],45*size[1]+20));
-		frame1.setMinimumSize(new Dimension(30*size[0],30*size[1]+20));
-		frame1.setMaximumSize(new Dimension(70*size[0],70*size[1]+20));
+		frame1.setPreferredSize(new Dimension(45*size[0],45*size[1]+35));
+		frame1.setMinimumSize(new Dimension(30*size[0],30*size[1]+35));
+		frame1.setMaximumSize(new Dimension(70*size[0],70*size[1]+35));
 		frame1.setResizable(true);
+		
 		Container cp = frame1.getContentPane();
 		cp.setLayout(new GridLayout(size[1],size[0]));
 		
@@ -62,7 +83,7 @@ public class SameMain {
 							moveLeft();
 							removableStones.clear();
 							showPrognosedPoints();
-							frame1.setTitle("SameGame; Punkte:"+points);
+							frame1.setTitle(lang.pointsTitle+points);
 							frame1.revalidate();
 							frame1.repaint();
 						}
@@ -72,6 +93,8 @@ public class SameMain {
 			}
 		}
 		showPrognosedPoints();
+		
+        frame1.setJMenuBar(getMenubar());
 		
 		frame1.pack();
 		frame1.setLocationRelativeTo(null);
@@ -89,7 +112,7 @@ public class SameMain {
     	for(String str:urlList) {
         	try {
         		key = str;
-                //URL url = new URL(BaseURL.getJarBase(SameMain.class), "./alternativepictures/"+key);
+                //URL url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key);
         		URL url = new URL(BaseURL.getJarBase(SameMain.class), key);
                 bi = ImageIO.read(url);
                 Variables.getPicturecache().put(key, bi); 
@@ -202,13 +225,16 @@ public class SameMain {
 				if(getPrognosedPoints()>0) {
 					gameEnd = false;
 				}
-				gameArr[x][y].setToolTipText("Punkteprognose: "+String.valueOf(getPrognosedPoints()));
+				gameArr[x][y].setToolTipText(lang.prognosedPoints+String.valueOf(getPrognosedPoints()));
 				removableStones.clear();
 			}
 		}
 		if(gameEnd) {
-			JOptionPane.showMessageDialog(null, "Das Spiel ist vorbei.\nDu hast "+points+" Punkte erreicht.", "Spielende", JOptionPane.PLAIN_MESSAGE);
-			System.err.println("Das Spiel ist vorbei");
+			frame1.setTitle(lang.pointsTitle+points);
+			JOptionPane.showMessageDialog(null, lang.evaluation(points), lang.endTitle, JOptionPane.PLAIN_MESSAGE);
+			if(!newGame()) {
+				System.exit(0);
+			}
 		}
 	}
 	
@@ -220,6 +246,137 @@ public class SameMain {
 		int add = (int)Math.ceil(num*(1+(num*0.4))); //0.4*num*num+num
 		return add;
 	}
+	
+	/**
+	 * Diese Methode fragt, ob der Spieler eine neue Partie starten oder das Spiel beenden moechte und fuehrt die entsprechende Aktion aus.
+	 */
+	private boolean newGame() {
+		int dialogrestart = JOptionPane.showConfirmDialog(null, lang.restartQuestion, lang.restartTitle, JOptionPane.YES_NO_OPTION);
+		if(dialogrestart == 0) {
+			for(int y=0;y<size[1];y++) {
+				for(int x=0;x<size[0];x++) {
+					gameArr[x][y].changeColor(new Random().nextInt(5));
+				}
+			}
+			removableStones.clear();
+			points = 0;
+			showPrognosedPoints();
+			frame1.setTitle(lang.pointsTitle+points);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Diese Methode ueberprueft das Betriebssystem des Nutzers und gibt eine Warnmeldung fuer alle Nutzer von Windows aus,
+	 * da das Programm expliziet auf und fuer Unix-basierende Systeme entwickelt wurde und auf Windows moeglicherweise zu Problemen fueren kann.
+	 */
+ 	private void sysWin() {
+ 		if(System.getProperty(lang.osname).toLowerCase().indexOf(lang.win) >= 0) {
+ 			JOptionPane.showMessageDialog(null, lang.windows, lang.wrongSystem, JOptionPane.WARNING_MESSAGE);
+ 		}
+ 	}
+ 	
+ 	/**
+ 	 * Diese Methode generiert eine Menuebar fuer das Fenster, in welcher der Nutzer wichtige Programmbefehle taetigen kann.
+ 	 * @return Gibt eine JMenuBar zurueck
+ 	 */
+ 	private JMenuBar getMenubar() {
+ 		JMenuBar menuBar = new JMenuBar();
+ 		JMenu menuSG = new JMenu(lang.programname);
+ 		JMenu menuSettings = new JMenu(lang.settings);
+ 		JMenu menuLeaderboard = new JMenu(lang.leaderboard);
+ 		
+ 		menuBar.add(menuSG);
+ 		JMenuItem itemRestart = new JMenuItem(lang.restart);
+ 		itemRestart.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				newGame();
+ 			}
+ 		});
+ 		itemRestart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		menuSG.add(itemRestart);
+ 		
+ 		JMenuItem itemClose = new JMenuItem(lang.terminate);
+ 		itemClose.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				int dialogclose = JOptionPane.showConfirmDialog(null, lang.closeQuestion, lang.closeTitle, JOptionPane.YES_NO_OPTION);
+ 				if(dialogclose == 0) {
+ 					System.exit(0);
+ 				}
+ 			}
+ 		});
+ 		itemClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		menuSG.add(itemClose);
+ 		
+ 		menuBar.add(menuSettings);
+ 		JMenuItem itemChangeUserName = new JMenuItem(lang.changeName);
+ 		itemChangeUserName.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				System.out.println(lang.changeName);
+ 			}
+ 		});
+ 		itemChangeUserName.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		
+ 		menuSettings.add(itemChangeUserName);
+ 		JMenu itemChangeDesign = new JMenu(lang.changeDesign);
+ 		ButtonGroup bg = new ButtonGroup();
+ 		JRadioButtonMenuItem m1 = new JRadioButtonMenuItem(lang.design1,true);
+ 		JRadioButtonMenuItem m2 = new JRadioButtonMenuItem(lang.design2);
+ 		JRadioButtonMenuItem m3 = new JRadioButtonMenuItem(lang.design3);
+ 		bg.add(m1); itemChangeDesign.add(m1); m1.setMnemonic('1'); m1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		bg.add(m2); itemChangeDesign.add(m2); m2.setMnemonic('2'); m2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		bg.add(m3); itemChangeDesign.add(m3); m3.setMnemonic('3'); m3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		m1.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				System.out.println(lang.designChanged);
+ 			}
+ 		});
+ 		m2.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				System.out.println(lang.designChanged);
+ 			}
+ 		});
+ 		m3.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				System.out.println(lang.designChanged);
+ 				//Variables.setWithImages(false);
+ 			}
+ 		});
+ 		
+ 		menuSettings.add(itemChangeDesign);
+ 		if(System.getProperty(lang.osname).toLowerCase().indexOf(lang.win) >= 0) {
+ 			JCheckBoxMenuItem itemHideWindowsMessage = new JCheckBoxMenuItem(lang.hideWindowsMessage,false);
+ 			itemHideWindowsMessage.addActionListener(new ActionListener() {
+ 				@Override
+ 				public void actionPerformed(ActionEvent evt) {
+ 					System.out.println(lang.hideWindowsMessage);
+ 				}
+ 			});
+ 			itemHideWindowsMessage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 			menuSettings.add(itemHideWindowsMessage);
+ 		}
+ 		
+ 		menuBar.add(menuLeaderboard);
+ 		JMenuItem itemShowLeaderboard = new JMenuItem(lang.show);
+ 		itemShowLeaderboard.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				System.err.println(lang.noLeaderboard);
+ 			}
+ 		});
+ 		itemShowLeaderboard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		menuLeaderboard.add(itemShowLeaderboard);
+ 		
+ 		return menuBar;
+ 	}
 
 	public static void main(String[] args) {
 		new SameMain();
