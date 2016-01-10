@@ -1,6 +1,7 @@
 package samegame;
 
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -11,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,6 +61,9 @@ public class SameMain {
 		loadFrame();
 	}
 	
+	/**
+	 * Diese Methode laedt den JFrame, in welchem die graphische Oberflaeche enthalten ist.
+	 */
 	private void loadFrame() {
 		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame1.setPreferredSize(new Dimension(45*size[0],45*size[1]+35));
@@ -105,14 +110,14 @@ public class SameMain {
 	 * Laedt alle Grafiken des Spiels in einen gemeinsamen Cache in Form einer TreeMap.
 	 */
 	private void loadPictures() {
-		String[] urlList = Variables.getUrlList();
+		String[] urlList = lang.urlList;
 		String key = null;
     	BufferedImage bi = null;
     	
     	for(String str:urlList) {
         	try {
         		key = str;
-                //URL url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key);
+                //URL url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key); //TODO entsprechen Design-Änderungen durchführen
         		URL url = new URL(BaseURL.getJarBase(SameMain.class), key);
                 bi = ImageIO.read(url);
                 Variables.getPicturecache().put(key, bi); 
@@ -225,7 +230,12 @@ public class SameMain {
 				if(getPrognosedPoints()>0) {
 					gameEnd = false;
 				}
-				gameArr[x][y].setToolTipText(lang.prognosedPoints+String.valueOf(getPrognosedPoints()));
+				int prognose = getPrognosedPoints();
+				if(prognose>0) {
+					gameArr[x][y].setToolTipText(lang.prognosedPoints+String.valueOf(getPrognosedPoints()));
+				} else {
+					gameArr[x][y].setToolTipText(lang.noPoints);
+				}
 				removableStones.clear();
 			}
 		}
@@ -286,7 +296,8 @@ public class SameMain {
  		JMenuBar menuBar = new JMenuBar();
  		JMenu menuSG = new JMenu(lang.programname);
  		JMenu menuSettings = new JMenu(lang.settings);
- 		JMenu menuLeaderboard = new JMenu(lang.leaderboard);
+ 		JMenu menuStatistics = new JMenu(lang.statistics);
+ 		JMenu menuHelp = new JMenu(lang.help);
  		
  		menuBar.add(menuSG);
  		JMenuItem itemRestart = new JMenuItem(lang.restart);
@@ -318,6 +329,7 @@ public class SameMain {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				System.out.println(lang.changeName);
+ 				//TODO Menü: Namensänderung erlauben
  			}
  		});
  		itemChangeUserName.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -335,18 +347,21 @@ public class SameMain {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				System.out.println(lang.designChanged);
+ 				//TODO Menü: Designänderung erlauben
  			}
  		});
  		m2.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				System.out.println(lang.designChanged);
+ 				//TODO Menü: Designänderung erlauben
  			}
  		});
  		m3.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				System.out.println(lang.designChanged);
+ 				//TODO Menü: Designänderung erlauben
  				//Variables.setWithImages(false);
  			}
  		});
@@ -358,22 +373,63 @@ public class SameMain {
  				@Override
  				public void actionPerformed(ActionEvent evt) {
  					System.out.println(lang.hideWindowsMessage);
+ 					//TODO Menü: Windowsmeldungausblenden erlauben
  				}
  			});
  			itemHideWindowsMessage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
  			menuSettings.add(itemHideWindowsMessage);
  		}
  		
- 		menuBar.add(menuLeaderboard);
- 		JMenuItem itemShowLeaderboard = new JMenuItem(lang.show);
+ 		menuBar.add(menuStatistics);
+ 		JMenuItem itemShowStatistics = new JMenuItem(lang.showStatistics);
+ 		itemShowStatistics.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				//TODO Die verschiedenen Designs beachten
+ 				int num0=0, num1=0, num2=0, num3=0, num4=0;
+ 				for(int y=0;y<size[1];y++) {
+ 					for(int x=0;x<size[0];x++) {
+ 						switch(gameArr[x][y].getColorNum()) {
+ 						case 0:num0++;break;
+ 						case 1:num1++;break;
+ 						case 2:num2++;break;
+ 						case 3:num3++;break;
+ 						case 4:num4++;break;
+ 						}
+ 					}
+ 				}
+ 				JOptionPane.showMessageDialog(null, lang.gameStatistics(num0, num1, num2, num3, num4, 0), lang.statistics, JOptionPane.PLAIN_MESSAGE);
+ 			}
+ 		});
+ 		itemShowStatistics.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		menuStatistics.add(itemShowStatistics);
+ 		
+ 		JMenuItem itemShowLeaderboard = new JMenuItem(lang.showLeaderboard);
  		itemShowLeaderboard.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				System.err.println(lang.noLeaderboard);
+ 				//TODO Menü: Bestenliste hinzufügen
  			}
  		});
  		itemShowLeaderboard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
- 		menuLeaderboard.add(itemShowLeaderboard);
+ 		menuStatistics.add(itemShowLeaderboard);
+ 		
+ 		menuBar.add(menuHelp);
+ 		JMenuItem itemShowManual = new JMenuItem(lang.showManual);
+ 		itemShowManual.addActionListener(new ActionListener() {
+ 			@Override
+ 			public void actionPerformed(ActionEvent evt) {
+ 				try {
+					Desktop.getDesktop().open(new File(lang.pathManual));
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, lang.noManual, lang.wrongFile, JOptionPane.ERROR_MESSAGE);
+				}
+ 				//TODO Anleitung generieren
+ 			}
+ 		});
+ 		itemShowManual.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		menuHelp.add(itemShowManual);
  		
  		return menuBar;
  	}

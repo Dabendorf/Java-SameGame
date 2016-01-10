@@ -18,8 +18,6 @@ public class Variables {
 	private static Map<String,BufferedImage> picturecache = new TreeMap<String,BufferedImage>();
 	/**Boolean, ob der Spieler mit Bildern oder Farbigen Feldern spielen moechte*/
 	private static boolean withImages = true;
-	/**Liste von Pfaden zu den Bildern des Spiels*/
-	private static String[] urlList = {"banana.png", "apple.png", "strawberry.png", "plum.png", "orange.png"};
 
 	public static Map<String, BufferedImage> getPicturecache() {
 		return picturecache;
@@ -31,9 +29,5 @@ public class Variables {
 
 	public static void setWithImages(boolean withImages) {
 		Variables.withImages = withImages;
-	}
-
-	public static String[] getUrlList() {
-		return urlList;
 	}
 }

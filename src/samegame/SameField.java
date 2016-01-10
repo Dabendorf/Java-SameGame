@@ -21,7 +21,7 @@ public class SameField extends JPanel {
 	/**Liste von verschiedenen, nutzbaren Farben*/
 	private Color[] colorList = {new Color(89,146,35), new Color(63,110,249), new Color(224,112,27), new Color(142,37,241), new Color(218,0,0)};
 	/**Liste von Pfaden zu den verfuegbaren Bildern*/
-	private String[] urlList = Variables.getUrlList();
+	private String[] urlList = new Language().urlList;
 	/**Pfad des aktuellen Bilds*/
 	private String key;
 	/**Aktuell anzuzeigendes Bildobjekt*/
