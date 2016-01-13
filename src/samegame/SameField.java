@@ -37,9 +37,7 @@ public class SameField extends JPanel {
 	
 	public void setColorNum(int colorNum) {
 		changeColor(colorNum);
-		this.repaint();
-		this.removeAll();
-		this.updateUI();
+		repaintCell();
 	}
 	
 	/**
@@ -99,8 +97,15 @@ public class SameField extends JPanel {
 	 */
 	public void setEmpty() {
 		colorNum=-1;
+		repaintCell();
+	}
+	
+	public void repaintCell() {
+		System.out.println(key);
+		bi = Variables.getPicturecache().get(key);
 		this.repaint();
 		this.removeAll();
 		this.updateUI();
+		this.revalidate();
 	}
 }

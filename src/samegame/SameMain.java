@@ -30,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 /**
@@ -53,11 +54,11 @@ public class SameMain {
 	private ArrayList<Point> removableStones = new ArrayList<Point>();
 	/**Anzahl der Punkte im aktuellen Spiel*/
 	private int points = 0;
-	/**Persoenliche Programmeinstellungen*/
-	//private Settings settings = new Settings(); //TODO Wird das gebraucht?
 	
 	public SameMain() {
-		sysWin();
+		if(!Variables.isHideWindowsMessage()) {
+			sysWin();
+		}
 		loadFrame();
 	}
 	
@@ -74,7 +75,8 @@ public class SameMain {
 		Container cp = frame1.getContentPane();
 		cp.setLayout(new GridLayout(size[1],size[0]));
 		
-		loadPictures();
+		//loadPictures();
+		setDesign();
 		for(int y=0;y<size[1];y++) {
 			for(int x=0;x<size[0];x++) {
 				final int x1=x, y1=y;
@@ -109,7 +111,7 @@ public class SameMain {
 	/**
 	 * Laedt alle Grafiken des Spiels in einen gemeinsamen Cache in Form einer TreeMap.
 	 */
-	private void loadPictures() {
+	/*private void loadPictures() {
 		String[] urlList = lang.urlList;
 		String key = null;
     	BufferedImage bi = null;
@@ -123,6 +125,32 @@ public class SameMain {
                 Variables.getPicturecache().put(key, bi); 
             } catch (MalformedURLException e) {} catch (IOException e) {}
         }
+	}*/
+	
+	private void setDesign() {
+		String[] urlList = lang.urlList;
+		String key = null;
+    	BufferedImage bi = null;
+    	
+    	if(Variables.getDesignNum()!=2) {
+    		for(String str:urlList) {
+            	try {
+            		key = str;
+            		URL url;
+            		if(Variables.getDesignNum()==0) {
+            			//url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key); //TODO entsprechen Design-Änderungen durchführen
+            			url = new URL(BaseURL.getJarBase(SameMain.class), key);
+            		} else {
+                    	System.out.println("Unfug");
+            			url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key); //TODO entsprechen Design-Änderungen durchführen
+            		}
+                    bi = ImageIO.read(url);
+                    Variables.getPicturecache().put(key, bi); 
+                    System.out.println(url);
+                } catch (MalformedURLException e) {} catch (IOException e) {}
+            }
+    	}
+    	frame1.repaint();
 	}
 	
 	/**
@@ -328,8 +356,7 @@ public class SameMain {
  		itemChangeUserName.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
- 				System.out.println(lang.changeName);
- 				//TODO Menü: Namensänderung erlauben
+ 				changeName();
  			}
  		});
  		itemChangeUserName.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -348,6 +375,14 @@ public class SameMain {
  			public void actionPerformed(ActionEvent evt) {
  				System.out.println(lang.designChanged);
  				//TODO Menü: Designänderung erlauben
+ 				Variables.setDesignNum(0);
+ 				setDesign();
+ 				for(int y=0;y<size[1];y++) {
+ 					for(int x=0;x<size[0];x++) {
+ 						gameArr[x][y].revalidate();
+ 					}
+ 				}
+ 				
  			}
  		});
  		m2.addActionListener(new ActionListener() {
@@ -355,6 +390,14 @@ public class SameMain {
  			public void actionPerformed(ActionEvent evt) {
  				System.out.println(lang.designChanged);
  				//TODO Menü: Designänderung erlauben
+ 				Variables.setDesignNum(1);
+ 				setDesign();
+ 				for(int y=0;y<size[1];y++) {
+ 					for(int x=0;x<size[0];x++) {
+ 						gameArr[x][y].repaint();
+ 						gameArr[x][y].revalidate();
+ 					}
+ 				}
  			}
  		});
  		m3.addActionListener(new ActionListener() {
@@ -363,6 +406,13 @@ public class SameMain {
  				System.out.println(lang.designChanged);
  				//TODO Menü: Designänderung erlauben
  				//Variables.setWithImages(false);
+ 				Variables.setDesignNum(2);
+ 				setDesign();
+ 				for(int y=0;y<size[1];y++) {
+ 					for(int x=0;x<size[0];x++) {
+ 						gameArr[x][y].repaintCell();
+ 					}
+ 				}
  			}
  		});
  		
@@ -372,8 +422,7 @@ public class SameMain {
  			itemHideWindowsMessage.addActionListener(new ActionListener() {
  				@Override
  				public void actionPerformed(ActionEvent evt) {
- 					System.out.println(lang.hideWindowsMessage);
- 					//TODO Menü: Windowsmeldungausblenden erlauben
+ 					Variables.changeHideWindowsMessage();
  				}
  			});
  			itemHideWindowsMessage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -432,6 +481,26 @@ public class SameMain {
  		menuHelp.add(itemShowManual);
  		
  		return menuBar;
+ 	}
+ 	
+ 	private void changeName() {
+ 		JTextField spielername00 = new JTextField(new Feldbegrenzung(16), "", 0);
+ 		Object[] namensfrage = {lang.questionName, spielername00};
+ 	    JOptionPane pane = new JOptionPane(namensfrage, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
+ 	    pane.createDialog(null, lang.questionNameTitle).setVisible(true);
+ 	    
+ 	    String oldName = Variables.getUsername();
+ 	    String newName = spielername00.getText();
+ 	    
+ 	    if(newName.equals("")) {
+    		JOptionPane.showMessageDialog(null, lang.nameEmpty, lang.nameEmptyTitle, JOptionPane.INFORMATION_MESSAGE);
+    		changeName();
+    	} else if(newName.equals(oldName)) {
+	    	JOptionPane.showMessageDialog(null, lang.sameName, lang.sameNameTitle, JOptionPane.INFORMATION_MESSAGE);
+	    } else {
+	    	JOptionPane.showMessageDialog(null, lang.nameAccepted, lang.nameAcceptedTitle, JOptionPane.INFORMATION_MESSAGE);
+	    	Variables.setUsername(newName);
+	    }
  	}
 
 	public static void main(String[] args) {
