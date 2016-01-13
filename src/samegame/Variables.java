@@ -16,8 +16,6 @@ public class Variables {
 	
 	/**TreeMap-Cache in welcher alle Spielbilder gespeichert sind*/
 	private static Map<String,BufferedImage> picturecache = new TreeMap<String,BufferedImage>();
-	/**Boolean, ob der Spieler mit Bildern oder Farbigen Feldern spielen moechte*/ //TODO Ersetzen durch Designnum?
-	//private static boolean withImages = true;
 	/**Name des Spielers*/
 	private static String username;
 	/**Nummer des verwendeten Designs*/
@@ -30,14 +28,8 @@ public class Variables {
 	}
 
 	public static boolean isWithImages() {
-		//int k = i == 10 ? 12 : 5;
 		return designNum==0||designNum==1 ? true : false;
-		//return withImages;
 	}
-
-	/*public static void setWithImages(boolean withImages) {
-		Variables.withImages = withImages;
-	}*/
 
 	public static String getUsername() {
 		return username;

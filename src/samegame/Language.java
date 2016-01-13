@@ -25,14 +25,13 @@ public class Language {
 	public String statistics = "Statistik";
 	public String terminate = "Beenden";
 	public String changeName = "Spielername ändern";
-	public String changeDesign = "<html><body><s>Design ändern</html></body></s>";
+	public String changeDesign = "Design ändern";
 	public String design1 = "Früchte";
 	public String design2 = "3D-Platten";
 	public String design3 = "Farben";
 	public String designChanged = "Design verändert";
 	public String hideWindowsMessage = "Warnmeldung deaktivieren";
 	public String showStatistics = "Spielstatistik";
-	//public String noGameStatistics = "Es gibt noch keine Bestenliste!";
 	public String showLeaderboard = "<html><body><s>Bestenliste</html></body></s>";
 	public String noLeaderboard = "Es gibt noch keine Bestenliste!";
 	public String help = "Hilfe";

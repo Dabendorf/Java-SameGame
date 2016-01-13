@@ -75,7 +75,6 @@ public class SameMain {
 		Container cp = frame1.getContentPane();
 		cp.setLayout(new GridLayout(size[1],size[0]));
 		
-		//loadPictures();
 		setDesign();
 		for(int y=0;y<size[1];y++) {
 			for(int x=0;x<size[0];x++) {
@@ -111,22 +110,6 @@ public class SameMain {
 	/**
 	 * Laedt alle Grafiken des Spiels in einen gemeinsamen Cache in Form einer TreeMap.
 	 */
-	/*private void loadPictures() {
-		String[] urlList = lang.urlList;
-		String key = null;
-    	BufferedImage bi = null;
-    	
-    	for(String str:urlList) {
-        	try {
-        		key = str;
-                //URL url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key); //TODO entsprechen Design-Änderungen durchführen
-        		URL url = new URL(BaseURL.getJarBase(SameMain.class), key);
-                bi = ImageIO.read(url);
-                Variables.getPicturecache().put(key, bi); 
-            } catch (MalformedURLException e) {} catch (IOException e) {}
-        }
-	}*/
-	
 	private void setDesign() {
 		String[] urlList = lang.urlList;
 		String key = null;
@@ -138,15 +121,12 @@ public class SameMain {
             		key = str;
             		URL url;
             		if(Variables.getDesignNum()==0) {
-            			//url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key); //TODO entsprechen Design-Änderungen durchführen
             			url = new URL(BaseURL.getJarBase(SameMain.class), key);
             		} else {
-                    	System.out.println("Unfug");
-            			url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key); //TODO entsprechen Design-Änderungen durchführen
+            			url = new URL(BaseURL.getJarBase(SameMain.class), lang.alternativePath+key);
             		}
                     bi = ImageIO.read(url);
                     Variables.getPicturecache().put(key, bi); 
-                    System.out.println(url);
                 } catch (MalformedURLException e) {} catch (IOException e) {}
             }
     	}
@@ -373,13 +353,11 @@ public class SameMain {
  		m1.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
- 				System.out.println(lang.designChanged);
- 				//TODO Menü: Designänderung erlauben
  				Variables.setDesignNum(0);
  				setDesign();
  				for(int y=0;y<size[1];y++) {
  					for(int x=0;x<size[0];x++) {
- 						gameArr[x][y].revalidate();
+ 						gameArr[x][y].repaintCell();
  					}
  				}
  				
@@ -388,14 +366,11 @@ public class SameMain {
  		m2.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
- 				System.out.println(lang.designChanged);
- 				//TODO Menü: Designänderung erlauben
  				Variables.setDesignNum(1);
  				setDesign();
  				for(int y=0;y<size[1];y++) {
  					for(int x=0;x<size[0];x++) {
- 						gameArr[x][y].repaint();
- 						gameArr[x][y].revalidate();
+ 						gameArr[x][y].repaintCell();
  					}
  				}
  			}
@@ -403,9 +378,6 @@ public class SameMain {
  		m3.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
- 				System.out.println(lang.designChanged);
- 				//TODO Menü: Designänderung erlauben
- 				//Variables.setWithImages(false);
  				Variables.setDesignNum(2);
  				setDesign();
  				for(int y=0;y<size[1];y++) {
@@ -483,6 +455,9 @@ public class SameMain {
  		return menuBar;
  	}
  	
+ 	/**
+ 	 * Diese Methode veraendert den Benutzernamen, unter welchem der Spieler agiert.
+ 	 */
  	private void changeName() {
  		JTextField spielername00 = new JTextField(new Feldbegrenzung(16), "", 0);
  		Object[] namensfrage = {lang.questionName, spielername00};
@@ -500,7 +475,7 @@ public class SameMain {
 	    } else {
 	    	JOptionPane.showMessageDialog(null, lang.nameAccepted, lang.nameAcceptedTitle, JOptionPane.INFORMATION_MESSAGE);
 	    	Variables.setUsername(newName);
-	    }
+	    }//TODO Nachfrage nach Benutzername bei Spielende, wenn keiner vorhanden
  	}
 
 	public static void main(String[] args) {
