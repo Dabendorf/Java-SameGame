@@ -50,10 +50,6 @@ public class Variables {
 	public static boolean isHideWindowsMessage() {
 		return hideWindowsMessage;
 	}
-
-	/*public static void setHideWindowsMessage(boolean hideWindowsMessage) {
-		this.hideWindowsMessage = hideWindowsMessage;
-	}*/
 	
 	public static void changeHideWindowsMessage() {
 		Variables.hideWindowsMessage = !Variables.hideWindowsMessage;

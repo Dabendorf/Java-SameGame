@@ -115,7 +115,7 @@ public class SameMain {
 		String key = null;
     	BufferedImage bi = null;
     	
-    	if(Variables.getDesignNum()!=2) {
+    	if(Variables.isWithImages()) {
     		for(String str:urlList) {
             	try {
             		key = str;
@@ -406,7 +406,6 @@ public class SameMain {
  		itemShowStatistics.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
- 				//TODO Die verschiedenen Designs beachten
  				int num0=0, num1=0, num2=0, num3=0, num4=0;
  				for(int y=0;y<size[1];y++) {
  					for(int x=0;x<size[0];x++) {
@@ -419,7 +418,7 @@ public class SameMain {
  						}
  					}
  				}
- 				JOptionPane.showMessageDialog(null, lang.gameStatistics(num0, num1, num2, num3, num4, 0), lang.statistics, JOptionPane.PLAIN_MESSAGE);
+ 				JOptionPane.showMessageDialog(null, lang.gameStatistics(num0, num1, num2, num3, num4, Variables.getDesignNum()), lang.statistics, JOptionPane.PLAIN_MESSAGE);
  			}
  		});
  		itemShowStatistics.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));

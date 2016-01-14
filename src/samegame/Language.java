@@ -53,8 +53,11 @@ public class Language {
 	}
 	
 	public String gameStatistics(int num0, int num1, int num2, int num3, int num4, int designNum) {
-		//TODO Designnum 0 ist hier normal aktuell
-		return new String("Bananen: "+num0+linebreak+"Äpfel: "+num1+linebreak+"Erdbeeren: "+num2+linebreak+"Pflaumen: "+num3+linebreak+"Orangen: "+num4+linebreak+"Gesamt: "+(num0+num1+num2+num3+num4));
+		if(designNum==0) {
+			return new String("Bananen: "+num0+linebreak+"Äpfel: "+num1+linebreak+"Erdbeeren: "+num2+linebreak+"Pflaumen: "+num3+linebreak+"Orangen: "+num4+linebreak+"Gesamt: "+(num0+num1+num2+num3+num4));
+		} else {
+			return new String("Blau: "+num0+linebreak+"Grün: "+num1+linebreak+"Rot: "+num2+linebreak+"Lila: "+num3+linebreak+"Orange: "+num4+linebreak+"Gesamt: "+(num0+num1+num2+num3+num4));
+		}
 	}
   	//TODO Aufraeumen
 }
