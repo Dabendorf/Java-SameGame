@@ -57,15 +57,12 @@ public class SameField extends JPanel {
 	 * Diese Methode generiert die anzuzeigende Figur der Zelle neu.
 	 */
 	private void getFigure() {
-		if(!this.isEmpty()) {
-			if(Variables.isWithImages()) {
-				this.setBackground(new Color(0x0f6c91));
-				this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
-			} else {
-				this.setBackground(colorList[colorNum]);
-				this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
-			}
+		if(Variables.isWithImages()) {
+			this.setBackground(new Color(0x0f6c91));
+		} else if(!this.isEmpty()) {
+			this.setBackground(colorList[colorNum]);
 		}
+		this.setBorder(BorderFactory.createLineBorder(new Color(0x08394d),1));
 	}
 	
 	public void paintComponent(Graphics gr) {

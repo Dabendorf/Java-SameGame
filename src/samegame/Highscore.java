@@ -1,6 +1,5 @@
 package samegame;
 
-
 /**
  * Diese Klasse fasst Highscores mit Spielername, Systemzeit, Anzahl der Restzahlen und Punktzahl zusammen.
  * 
@@ -9,9 +8,13 @@ package samegame;
  */
 public class Highscore implements Comparable<Highscore> {
 	
+	/**Zeit zu der der Highscore erreicht wurde*/
 	private long systemtime;
+	/**Name des Spielers*/
 	private String name;
+	/**Anzahl verbliebener Zellen bei Spielende*/
 	private int numOfRestCells;
+	/**Punktzahl des Highscores*/
 	private int points;
 	
 	public Highscore(long systemtime, String name, int numOfRestCells, int points) {
@@ -39,7 +42,7 @@ public class Highscore implements Comparable<Highscore> {
 
 	/**
 	 * Diese compareTo-Methode vergleicht die Highscores.
-	 * Zuerst wird bevorzugt, wer am wenigsten Zeilen benoetigt hat und bei Gleichstand, wer weniger Zeit benoetigte.
+	 * Sie vergleicht, welcher Spieler mehr Punkte erreichte.
 	 */
 	public int compareTo(Highscore o) {
 		return ((Integer)o.points).compareTo(points);

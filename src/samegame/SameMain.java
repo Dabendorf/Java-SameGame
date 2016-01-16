@@ -458,7 +458,7 @@ public class SameMain {
  	 * Diese Methode veraendert den Benutzernamen, unter welchem der Spieler agiert.
  	 */
  	private void changeName() {
- 		JTextField spielername00 = new JTextField(new Feldbegrenzung(16), "", 0);
+ 		JTextField spielername00 = new JTextField(new FieldBoundary(16), "", 0);
  		Object[] namensfrage = {lang.questionName, spielername00};
  	    JOptionPane pane = new JOptionPane(namensfrage, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
  	    pane.createDialog(null, lang.questionNameTitle).setVisible(true);

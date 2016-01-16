@@ -48,10 +48,25 @@ public class Language {
 	public String nameAccepted = "Dein Name wurde abgespeichert.";
 	public String nameAcceptedTitle = "Name akzeptiert";
 	
+	/**
+	 * Diese Methode gibt eine Spielendmeldung mit Punktzahl zurueck.
+	 * @param points Nimmt Punktzahl entgegen.
+	 * @return Gibt auszugebenden String zurueck.
+	 */
 	public String evaluation(int points) {
 		return "Das Spiel ist vorbei."+linebreak+"Du hast "+points+" Punkte erreicht.";
 	}
 	
+	/**
+	 * Diese Methode generiert den Statistikstring, wie viele Steine noch von welcher Sorte uebrig sind.
+	 * @param num0 Anzahl der Steine von Sorte 0.
+	 * @param num1 Anzahl der Steine von Sorte 1.
+	 * @param num2 Anzahl der Steine von Sorte 2.
+	 * @param num3 Anzahl der Steine von Sorte 3.
+	 * @param num4 Anzahl der Steine von Sorte 4.
+	 * @param designNum Nummer des verwendeten Spieldesigns.
+	 * @return Gibt den Statistikstring zurueck.
+	 */
 	public String gameStatistics(int num0, int num1, int num2, int num3, int num4, int designNum) {
 		if(designNum==0) {
 			return new String("Bananen: "+num0+linebreak+"Äpfel: "+num1+linebreak+"Erdbeeren: "+num2+linebreak+"Pflaumen: "+num3+linebreak+"Orangen: "+num4+linebreak+"Gesamt: "+(num0+num1+num2+num3+num4));

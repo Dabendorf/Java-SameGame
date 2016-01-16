@@ -16,11 +16,11 @@ import javax.swing.text.PlainDocument;
  * @version 1.0
  * 
  */
-public class Feldbegrenzung extends PlainDocument {
+public class FieldBoundary extends PlainDocument {
 	
 	private int maxlaenge;
 	
-	public Feldbegrenzung(int maxlaenge) {
+	public FieldBoundary(int maxlaenge) {
 		this.maxlaenge = maxlaenge;
 	}
 	
