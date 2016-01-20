@@ -29,8 +29,8 @@ public class Leaderboard {
 
 	private JFrame frame1 = new JFrame("Bestenliste");
 	private JTable table1 = new JTable();
-	private GridLayout gridlayout = new GridLayout();
 	private ArrayList<Highscore> highscorelist = new ArrayList<Highscore>();
+	private LoadFile lf = new LoadFile(0);
 
 	public Leaderboard() {
 		frame1.setPreferredSize(new Dimension(500,300));
@@ -44,13 +44,13 @@ public class Leaderboard {
         });
 	    
 	    Container cp = frame1.getContentPane();
-	    cp.setLayout(gridlayout);
+	    cp.setLayout(new GridLayout());
 	    
 	    loadHighscores();
 	}
 	
 	private void loadHighscores() {
-		LoadFile lf = new LoadFile(0);
+		
 		for(Highscore hsc:lf.getAllHighscores()) {
 			highscorelist.add(hsc);
 		}
@@ -74,7 +74,7 @@ public class Leaderboard {
 			    Format format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 				line.add(format.format(date));
 				tableContent.add(line);
-				new LoadFile(0).addHighscore(hsc, highscorelist.indexOf(hsc));
+				lf.addHighscore(hsc, highscorelist.indexOf(hsc));
 			}
 		}
 
@@ -85,15 +85,15 @@ public class Leaderboard {
 		titel.add("Erreicht");
 		table1 = new JTable(tableContent, titel);
 		
-		table1.getColumn("Name").setPreferredWidth(20);
-	    table1.getColumn("Punkte").setPreferredWidth(10);
-	    table1.getColumn("Restzellen").setPreferredWidth(10);
-	    table1.getColumn("Erreicht").setPreferredWidth(20);
+		table1.getColumn("Name").setPreferredWidth(200);
+	    table1.getColumn("Punkte").setPreferredWidth(100);
+	    table1.getColumn("Restzellen").setPreferredWidth(100);
+	    table1.getColumn("Erreicht").setPreferredWidth(200);
 	    table1.getTableHeader().setBackground(Color.lightGray);
 	    table1.setEnabled(false);
 	    
 	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-	    centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+	    centerRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 	    for(int x=0;x<table1.getColumnCount();x++) {
 	    	table1.getColumnModel().getColumn(x).setCellRenderer(centerRenderer);
 	    	table1.getTableHeader().getColumnModel().getColumn(x).setCellRenderer(centerRenderer);

@@ -7,7 +7,7 @@ package samegame;
  * @version 1.0
  */
 public class Highscore implements Comparable<Highscore> {
-	
+
 	/**Zeit zu der der Highscore erreicht wurde*/
 	private long systemtime;
 	/**Name des Spielers*/

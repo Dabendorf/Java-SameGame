@@ -56,13 +56,13 @@ public class LoadFile {
 	public void addHighscore(Highscore hsc,int num) {
 		try {
 			String temp = String.valueOf(hsc.getSystemtime()+","+hsc.getName()+","+hsc.getNumOfRestCells()+","+hsc.getPoints());
-			props.setProperty("highscore"+num, temp);
-			props.setProperty("numOfHighscores", String.valueOf(num+1));
+			props.setProperty("highscore"+num, encrypt(temp));
+			props.setProperty("numOfHighscores", encrypt(String.valueOf(num+1)));
 			FileOutputStream fileOut = new FileOutputStream(file);
 			props.storeToXML(fileOut, "SameGame Highscores");
 			fileOut.close();
 		} catch(IOException e) {
-			System.err.println("Frau Klinger war hier!");
+			e.printStackTrace();
 		}
 	}
 	
@@ -79,8 +79,8 @@ public class LoadFile {
 		
 		int numOfHighscores;
 		try {
-			numOfHighscores = Integer.valueOf(props.getProperty("numOfHighscores"));
-		} catch(NullPointerException e) {
+			numOfHighscores = Integer.valueOf(decrypt(props.getProperty("numOfHighscores")));
+		} catch(Exception e) {
 			numOfHighscores = 0;
 		}
 		
@@ -93,7 +93,7 @@ public class LoadFile {
 	
 	private Highscore getHighscore(String key) {
 		try {
-			String temp = props.getProperty(key);
+			String temp = decrypt(props.getProperty(key));
 			String[] temp2 = temp.split(",");
 			Highscore hsc = new Highscore(Long.valueOf(temp2[0]),temp2[1],Integer.valueOf(temp2[2]),Integer.valueOf(temp2[3]));
 			return hsc;
@@ -115,7 +115,7 @@ public class LoadFile {
 			crypt += (char) result;
 		}
 		return crypt;
-		}
+	}
  	
  	/**
 	 * Diese Methode entschluesselt den eingegebenen String.

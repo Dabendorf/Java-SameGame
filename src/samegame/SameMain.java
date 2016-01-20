@@ -50,7 +50,7 @@ public class SameMain {
 	/**Programmfenster des Spiels*/
 	private JFrame frame1 = new JFrame(lang.programname);
 	/**Anzahl der Spielelemente nach Laenge und Breite*/
-	private int[] size = {4,4}; //TODO zuruecksetzen
+	private int[] size = {20, 12};
 	/**Array aller Spielzellen*/
 	private SameField[][] gameArr = new SameField[size[0]][size[1]];
 	/**Eine Liste von Steinen, welche durch Benutzerklick entfernt wird*/
