@@ -47,5 +47,4 @@ public class FieldBoundary extends PlainDocument {
 			return false;
 		}
 	}
-	
 }

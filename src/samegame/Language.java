@@ -32,7 +32,7 @@ public class Language {
 	public String designChanged = "Design verändert";
 	public String hideWindowsMessage = "Warnmeldung deaktivieren";
 	public String showStatistics = "Spielstatistik";
-	public String showLeaderboard = "<html><body><s>Bestenliste</html></body></s>";
+	public String showLeaderboard = "Bestenliste";
 	public String noLeaderboard = "Es gibt noch keine Bestenliste!";
 	public String help = "Hilfe";
 	public String showManual = "<html><body><s>Anleitung</html></body></s>";
@@ -47,6 +47,7 @@ public class Language {
 	public String sameNameTitle = "Name unverändert";
 	public String nameAccepted = "Dein Name wurde abgespeichert.";
 	public String nameAcceptedTitle = "Name akzeptiert";
+	public String[] okayButton = {"OK"};
 	
 	/**
 	 * Diese Methode gibt eine Spielendmeldung mit Punktzahl zurueck.

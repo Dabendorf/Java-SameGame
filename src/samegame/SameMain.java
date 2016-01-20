@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 
 /**
  * Dies ist die Hauptklasse vom SameGame-Spiel, welche den Spielablauf steuert und die graphische Oberflaeche laedt.
@@ -47,7 +50,7 @@ public class SameMain {
 	/**Programmfenster des Spiels*/
 	private JFrame frame1 = new JFrame(lang.programname);
 	/**Anzahl der Spielelemente nach Laenge und Breite*/
-	private int[] size = {20, 12};
+	private int[] size = {4,4}; //TODO zuruecksetzen
 	/**Array aller Spielzellen*/
 	private SameField[][] gameArr = new SameField[size[0]][size[1]];
 	/**Eine Liste von Steinen, welche durch Benutzerklick entfernt wird*/
@@ -56,6 +59,8 @@ public class SameMain {
 	private int points = 0;
 	
 	public SameMain() {
+		LoadFile lf = new LoadFile(1);
+		lf.readSettings();
 		if(!Variables.isHideWindowsMessage()) {
 			sysWin();
 		}
@@ -66,7 +71,14 @@ public class SameMain {
 	 * Diese Methode laedt den JFrame, in welchem die graphische Oberflaeche enthalten ist.
 	 */
 	private void loadFrame() {
-		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame1.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		frame1.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				LoadFile lf = new LoadFile(1);
+				lf.writeSettings();
+				System.exit(0);
+			}
+		});
 		frame1.setPreferredSize(new Dimension(45*size[0],45*size[1]+35));
 		frame1.setMinimumSize(new Dimension(30*size[0],30*size[1]+35));
 		frame1.setMaximumSize(new Dimension(70*size[0],70*size[1]+35));
@@ -135,8 +147,8 @@ public class SameMain {
 	
 	/**
 	 * Diese Methode ermittelt alle Steine, die entfernbar sind, weil sie gleichfarbige Nachbaren haben.
-	 * @param x x-Koordinate des Steins
-	 * @param y y-Koordinate des Steins
+	 * @param x x-Koordinate des Steins.
+	 * @param y y-Koordinate des Steins.
 	 */
 	private void findRemovableStones(int x, int y) {
 		int[][] dirArr = {{-1,0},{1,0},{0,-1},{0,1}};
@@ -249,11 +261,33 @@ public class SameMain {
 		}
 		if(gameEnd) {
 			frame1.setTitle(lang.pointsTitle+points);
-			JOptionPane.showMessageDialog(null, lang.evaluation(points), lang.endTitle, JOptionPane.PLAIN_MESSAGE);
-			if(!newGame()) {
-				System.exit(0);
+			Leaderboard lb = new Leaderboard();
+			lb.addHighscore(System.currentTimeMillis(),Variables.getUsername(),getNumOfRestcells(),points);
+			lb.sort();
+			Object[] options = lang.okayButton;
+		    JOptionPane.showOptionDialog(null, lang.evaluation(points), lang.endTitle, JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			lb.show(true);
+			lb.getFrame1().setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			lb.getFrame1().addWindowListener(new WindowAdapter() {
+				public void windowClosing(WindowEvent e) {
+					if(!newGame()) {
+						System.exit(0);
+					}
+				}
+			});
+		}
+	}
+	
+	private int getNumOfRestcells() {
+		int counter = 0;
+		for(int y=0;y<size[1];y++) {
+			for(int x=0;x<size[0];x++) {
+				if(!gameArr[x][y].isEmpty()) {
+					counter++;
+				}
 			}
 		}
+		return counter;
 	}
 	
 	/**
@@ -344,13 +378,18 @@ public class SameMain {
  		menuSettings.add(itemChangeUserName);
  		JMenu itemChangeDesign = new JMenu(lang.changeDesign);
  		ButtonGroup bg = new ButtonGroup();
- 		JRadioButtonMenuItem m1 = new JRadioButtonMenuItem(lang.design1,true);
- 		JRadioButtonMenuItem m2 = new JRadioButtonMenuItem(lang.design2);
- 		JRadioButtonMenuItem m3 = new JRadioButtonMenuItem(lang.design3);
- 		bg.add(m1); itemChangeDesign.add(m1); m1.setMnemonic('1'); m1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
- 		bg.add(m2); itemChangeDesign.add(m2); m2.setMnemonic('2'); m2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
- 		bg.add(m3); itemChangeDesign.add(m3); m3.setMnemonic('3'); m3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
- 		m1.addActionListener(new ActionListener() {
+ 		JRadioButtonMenuItem m0 = new JRadioButtonMenuItem(lang.design1);
+ 		JRadioButtonMenuItem m1 = new JRadioButtonMenuItem(lang.design2);
+ 		JRadioButtonMenuItem m2 = new JRadioButtonMenuItem(lang.design3);
+ 		switch(Variables.getDesignNum()) {
+ 		case 0:m0.setSelected(true);
+ 		case 1:m1.setSelected(true);
+ 		case 2:m2.setSelected(true);
+ 		}
+ 		bg.add(m0); itemChangeDesign.add(m0); m0.setMnemonic('1'); m0.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		bg.add(m1); itemChangeDesign.add(m1); m1.setMnemonic('2'); m1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		bg.add(m2); itemChangeDesign.add(m2); m2.setMnemonic('3'); m2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 		m0.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				Variables.setDesignNum(0);
@@ -360,10 +399,9 @@ public class SameMain {
  						gameArr[x][y].repaintCell();
  					}
  				}
- 				
  			}
  		});
- 		m2.addActionListener(new ActionListener() {
+ 		m1.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				Variables.setDesignNum(1);
@@ -375,7 +413,7 @@ public class SameMain {
  				}
  			}
  		});
- 		m3.addActionListener(new ActionListener() {
+ 		m2.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
  				Variables.setDesignNum(2);
@@ -398,6 +436,7 @@ public class SameMain {
  				}
  			});
  			itemHideWindowsMessage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+ 			itemHideWindowsMessage.setSelected(Variables.isHideWindowsMessage());
  			menuSettings.add(itemHideWindowsMessage);
  		}
  		
@@ -428,8 +467,10 @@ public class SameMain {
  		itemShowLeaderboard.addActionListener(new ActionListener() {
  			@Override
  			public void actionPerformed(ActionEvent evt) {
- 				System.err.println(lang.noLeaderboard);
- 				//TODO Menü: Bestenliste hinzufügen
+ 				Leaderboard lb = new Leaderboard();
+ 				lb.sort();
+ 				lb.show(true);
+ 				lb.getFrame1().setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
  			}
  		});
  		itemShowLeaderboard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -474,7 +515,7 @@ public class SameMain {
 	    } else {
 	    	JOptionPane.showMessageDialog(null, lang.nameAccepted, lang.nameAcceptedTitle, JOptionPane.INFORMATION_MESSAGE);
 	    	Variables.setUsername(newName);
-	    }//TODO Nachfrage nach Benutzername bei Spielende, wenn keiner vorhanden
+	    }
  	}
 
 	public static void main(String[] args) {
