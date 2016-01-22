@@ -44,7 +44,7 @@ import javax.swing.WindowConstants;
  *
  */
 public class SameMain {
-	Test
+	
 	/**Sammlung von Sprach-Strings*/
 	private Language lang = new Language();
 	/**Programmfenster des Spiels*/
