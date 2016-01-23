@@ -27,9 +27,13 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class Leaderboard {
 
+	/**JFrame auf dem die Tabelle dargestellt wird*/
 	private JFrame frame1 = new JFrame("Bestenliste");
+	/**Highscoretabelle*/
 	private JTable table1 = new JTable();
+	/**ArrayList mit Highscores*/
 	private ArrayList<Highscore> highscorelist = new ArrayList<Highscore>();
+	/**Objekt der Klasse zum Aufrufen der Highscores*/
 	private LoadFile lf = new LoadFile(0);
 
 	public Leaderboard() {

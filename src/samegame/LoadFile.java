@@ -15,9 +15,9 @@ import java.util.Properties;
  */
 public class LoadFile {
 	
-	/**Pfad zur Speicherdatei für Spieleinstellungen*/
+	/**Pfad zur Speicherdatei fuer Spieleinstellungen*/
 	private String fileSettings = "sgfiles/settings.xml";
-	/**Pfad zur Speicherdatei für Highscores*/
+	/**Pfad zur Speicherdatei fuer Highscores*/
 	private String fileHighscore = "sgfiles/highscores.xml";
 	/**Schluessel fuer die Vigenereverschluesselung*/
 	private char[] vigKey = "Heizoelrueckstossabdaempfung".toCharArray();
