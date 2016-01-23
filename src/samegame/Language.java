@@ -1,5 +1,7 @@
 package samegame;
 
+import javax.swing.JOptionPane;
+
 public class Language {
 	
 	public String linebreak = System.getProperty("line.separator");
@@ -13,7 +15,6 @@ public class Language {
 	public String osname = "os.name";
 	public String win = "win";
 	public String wrongSystem = "System veraltet";
-	//public String dateifehltTitel = "Fehlerhafte Datei";
 	public String windows = "Dieses Computerspiel wurde für OS X und Linux entwickelt."+linebreak+"Es ist nicht primär mit Windows kompatibel."+linebreak+"Sollte es zu Problemen bei der Ausführung kommen,"+linebreak+"dann öffne das Spiel bitte auf einem PC"+linebreak+"mit Mac OS X oder Linux!";
 	public String endTitle = "Spielende";
 	public String restartTitle = "Neue Runde?";
@@ -33,12 +34,9 @@ public class Language {
 	public String hideWindowsMessage = "Warnmeldung deaktivieren";
 	public String showStatistics = "Spielstatistik";
 	public String showLeaderboard = "Bestenliste";
-	public String noLeaderboard = "Es gibt noch keine Bestenliste!";
 	public String help = "Hilfe";
-	public String showManual = "<html><body><s>Anleitung</html></body></s>";
+	public String showManual = "Anleitung";
 	public String pathManual = "sgfiles/manual.pdf";
-	public String wrongFile = "Fehlerhafte Datei";
-	public String noManual = "Die Datei /"+pathManual+" ist nicht vorhanden."+linebreak+"Stelle die Datei wieder her, um die Anleitung öffnen zu können.";
 	public String questionName = "Wie heißt Du?";
 	public String questionNameTitle = "Namensabfrage";
 	public String nameEmpty = "Du hast keinen Namen eingegeben."+linebreak+"Bitte gib Deinen Namen ein.";
@@ -47,7 +45,9 @@ public class Language {
 	public String sameNameTitle = "Name unverändert";
 	public String nameAccepted = "Dein Name wurde abgespeichert.";
 	public String nameAcceptedTitle = "Name akzeptiert";
-	public String[] okayButton = {"OK"};
+	public String[] okayButton = {"OK", "Name ändern"};
+	public String emptyStr = "";
+	public String defaultName = "MaxMustermann";
 	
 	/**
 	 * Diese Methode gibt eine Spielendmeldung mit Punktzahl zurueck.
@@ -55,7 +55,7 @@ public class Language {
 	 * @return Gibt auszugebenden String zurueck.
 	 */
 	public String evaluation(int points) {
-		return "Das Spiel ist vorbei."+linebreak+"Du hast "+points+" Punkte erreicht.";
+		return "Glückwunsch "+Variables.getUsername()+", Du hast "+points+" Punkte erreicht.";
 	}
 	
 	/**
@@ -75,5 +75,8 @@ public class Language {
 			return new String("Blau: "+num0+linebreak+"Grün: "+num1+linebreak+"Rot: "+num2+linebreak+"Lila: "+num3+linebreak+"Orange: "+num4+linebreak+"Gesamt: "+(num0+num1+num2+num3+num4));
 		}
 	}
-  	//TODO Aufraeumen
+	
+	public void fileDamage(String filename) {
+		JOptionPane.showMessageDialog(null, "Die Speicherdatei /"+filename+" ist nicht vorhanden oder beschädigt."+linebreak+"Die Spielfunktion ist nur eingeschränkt möglich."+linebreak+"Stelle die Speicherdatei wieder her und versuche es erneut.", "Fehlerhafte Datei", JOptionPane.ERROR_MESSAGE);
+	}
 }

@@ -17,7 +17,7 @@ public class Variables {
 	/**TreeMap-Cache in welcher alle Spielbilder gespeichert sind*/
 	private static Map<String,BufferedImage> picturecache = new TreeMap<String,BufferedImage>();
 	/**Name des Spielers*/
-	private static String username;
+	private static String username = new Language().defaultName;
 	/**Nummer des verwendeten Designs*/
 	private static int designNum = 0;
 	/**Variable ob Windowswarnmeldung deaktiviert wird*/

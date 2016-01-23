@@ -2,7 +2,6 @@ package samegame;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -12,6 +11,7 @@ public class LoadFile {
 	private String fileSettings = "sgfiles/settings.xml";
 	private String fileHighscore = "sgfiles/highscores.xml";
 	private char[] vigKey = "Heizoelrueckstossabdaempfung".toCharArray();
+	private Language lang = new Language();
 	private Properties props = new Properties();
 	private File file;
 	
@@ -31,10 +31,12 @@ public class LoadFile {
 			FileOutputStream fileOut = new FileOutputStream(file);
 			props.storeToXML(fileOut, "SameGame Settings");
 			fileOut.close();
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
 		} catch(IOException e) {
-			e.printStackTrace();
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				lang.fileDamage(fileSettings);
+			}
 		}
 	}
 
@@ -46,10 +48,12 @@ public class LoadFile {
 			Variables.setUsername(decrypt(props.getProperty("username")));
 			Variables.setDesignNum(Integer.valueOf(decrypt(props.getProperty("designNum"))));
 			Variables.setHideWindowsMessage(Boolean.valueOf(decrypt(props.getProperty("hideWindowsMessage"))));
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
 		} catch(IOException e) {
-			e.printStackTrace();
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				lang.fileDamage(fileSettings);
+			}
 		}
 	}
 	
@@ -62,7 +66,11 @@ public class LoadFile {
 			props.storeToXML(fileOut, "SameGame Highscores");
 			fileOut.close();
 		} catch(IOException e) {
-			e.printStackTrace();
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				lang.fileDamage(fileHighscore);
+			}
 		}
 	}
 	
@@ -71,10 +79,12 @@ public class LoadFile {
 			FileInputStream fileInput = new FileInputStream(file);
 			props.loadFromXML(fileInput);
 			fileInput.close();
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
 		} catch(IOException e) {
-			e.printStackTrace();
+			try {
+				file.createNewFile();
+			} catch (IOException e1) {
+				lang.fileDamage(fileHighscore);
+			}
 		}
 		
 		int numOfHighscores;
@@ -136,6 +146,4 @@ public class LoadFile {
   		}
   		return decrypt;
  	}
- 	
- 	//TODO Fehlermeldungen fuer fehlende Dateien, ggf. Eigenstaendige Erzeugung selbiger
 }

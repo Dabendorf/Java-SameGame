@@ -261,11 +261,14 @@ public class SameMain {
 		}
 		if(gameEnd) {
 			frame1.setTitle(lang.pointsTitle+points);
-			Leaderboard lb = new Leaderboard();
+			Object[] options = lang.okayButton;
+		    int question = JOptionPane.showOptionDialog(null, lang.evaluation(points), lang.endTitle, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options, options[0]);
+		    if(question==1) {
+		    	changeName();
+		    }
+		    Leaderboard lb = new Leaderboard();
 			lb.addHighscore(System.currentTimeMillis(),Variables.getUsername(),getNumOfRestcells(),points);
 			lb.sort();
-			Object[] options = lang.okayButton;
-		    JOptionPane.showOptionDialog(null, lang.evaluation(points), lang.endTitle, JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 			lb.show(true);
 			lb.getFrame1().setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 			lb.getFrame1().addWindowListener(new WindowAdapter() {
@@ -484,7 +487,7 @@ public class SameMain {
  				try {
 					Desktop.getDesktop().open(new File(lang.pathManual));
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, lang.noManual, lang.wrongFile, JOptionPane.ERROR_MESSAGE);
+					lang.fileDamage(lang.pathManual);
 				}
  				//TODO Anleitung generieren
  			}
@@ -499,7 +502,7 @@ public class SameMain {
  	 * Diese Methode veraendert den Benutzernamen, unter welchem der Spieler agiert.
  	 */
  	private void changeName() {
- 		JTextField spielername00 = new JTextField(new FieldBoundary(16), "", 0);
+ 		JTextField spielername00 = new JTextField(new FieldBoundary(16), lang.emptyStr, 0);
  		Object[] namensfrage = {lang.questionName, spielername00};
  	    JOptionPane pane = new JOptionPane(namensfrage, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
  	    pane.createDialog(null, lang.questionNameTitle).setVisible(true);
@@ -507,7 +510,7 @@ public class SameMain {
  	    String oldName = Variables.getUsername();
  	    String newName = spielername00.getText();
  	    
- 	    if(newName.equals("")) {
+ 	    if(newName.equals(lang.emptyStr)) {
     		JOptionPane.showMessageDialog(null, lang.nameEmpty, lang.nameEmptyTitle, JOptionPane.INFORMATION_MESSAGE);
     		changeName();
     	} else if(newName.equals(oldName)) {
