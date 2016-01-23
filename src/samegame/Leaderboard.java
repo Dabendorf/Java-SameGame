@@ -49,17 +49,29 @@ public class Leaderboard {
 	    loadHighscores();
 	}
 	
+	/**
+	 * Diese Methode beantragt alle Highscores aus der xml-Datei und fuegt sie einer ArrayList hinzu.
+	 */
 	private void loadHighscores() {
-		
 		for(Highscore hsc:lf.getAllHighscores()) {
 			highscorelist.add(hsc);
 		}
 	}
 	
+	/**
+	 * Diese Methode erstellt einen neuen Highscore.
+	 * @param systemtime Zeit zu der der Highscore erreicht wurde.
+	 * @param name Name des Spielers.
+	 * @param numOfRestCells Anzahl restlich verbliebener Spielzellen.
+	 * @param points Erreichte Punktzahl.
+	 */
 	public void addHighscore(long systemtime, String name, int numOfRestCells, int points) {
 		highscorelist.add(new Highscore(systemtime,name,numOfRestCells,points));
 	}
 	
+	/**
+	 * Diese Methode sortiert alle Highscores und fuegt sie in die Tabelle ein.
+	 */
 	public void sort() {
 		Collections.sort(highscorelist);
 		Vector<Object> tableContent = new Vector<Object>();

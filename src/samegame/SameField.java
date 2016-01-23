@@ -42,7 +42,7 @@ public class SameField extends JPanel {
 	
 	/**
 	 * Diese Methode tauscht die Farbe bzw. das Bild der Zelle gegen eine andere aus und laedt die Zelle neu.
-	 * @param colorNum Nummer des neuen Farbobjekts
+	 * @param colorNum Nummer des neuen Farbobjekts.
 	 */
 	public void changeColor(int colorNum) {
 		this.colorNum = colorNum;
@@ -78,7 +78,7 @@ public class SameField extends JPanel {
 	
 	/**
 	 * Diese Methode ueberprueft, ob dem Feld keine echte Farbe, also -1 als Wert zugeordnet ist.
-	 * @return Gibt Zustand zurueck
+	 * @return Gibt Zustand zurueck.
 	 */
 	public boolean isEmpty() {
 		if(colorNum==-1) {
@@ -90,7 +90,6 @@ public class SameField extends JPanel {
 
 	/**
 	 * Diese Methode leert ein einzelnes Feld oder gibt ihm eine Farbe zurueck.
-	 * @param empty Boolean, ob geleert oder gefuellt wird
 	 */
 	public void setEmpty() {
 		colorNum=-1;

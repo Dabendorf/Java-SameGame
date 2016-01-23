@@ -2,6 +2,13 @@ package samegame;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Diese Klasse speichert alle sprachlichen Elemente des Projekts in Strings und Methoden ab.
+ * 
+ * @author Lukas Schramm
+ * @version 1.0
+ *
+ */
 public class Language {
 	
 	public String linebreak = System.getProperty("line.separator");
@@ -76,6 +83,10 @@ public class Language {
 		}
 	}
 	
+	/**
+	 * Diese Methode gibt eine Meldung ueber eine fehlerhaft angelegte oder nicht vorhandene Speicherdatei aus.
+	 * @param filename Pfad der fehlerhaften Datei.
+	 */
 	public void fileDamage(String filename) {
 		JOptionPane.showMessageDialog(null, "Die Speicherdatei /"+filename+" ist nicht vorhanden oder beschädigt."+linebreak+"Die Spielfunktion ist nur eingeschränkt möglich."+linebreak+"Stelle die Speicherdatei wieder her und versuche es erneut.", "Fehlerhafte Datei", JOptionPane.ERROR_MESSAGE);
 	}

@@ -6,13 +6,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Diese Klasse laedt und speichert alle Spielstaende und Einstellungen des Projekts verschluesselt in xml-Dateien.
+ * 
+ * @author Lukas Schramm
+ * @version 1.0
+ *
+ */
 public class LoadFile {
 	
+	/**Pfad zur Speicherdatei für Spieleinstellungen*/
 	private String fileSettings = "sgfiles/settings.xml";
+	/**Pfad zur Speicherdatei für Highscores*/
 	private String fileHighscore = "sgfiles/highscores.xml";
+	/**Schluessel fuer die Vigenereverschluesselung*/
 	private char[] vigKey = "Heizoelrueckstossabdaempfung".toCharArray();
+	/**Objekt der Sprachspeicherklasse*/
 	private Language lang = new Language();
+	/**Zu speichernde Propertieselemente*/
 	private Properties props = new Properties();
+	/**Die geladene Speicherdatei*/
 	private File file;
 	
 	public LoadFile(int fileNum) {
@@ -22,6 +35,9 @@ public class LoadFile {
 		}
 	}
 	
+	/**
+	 * Diese Methode schreibt alle Einstellungen eines Spielers in einer xml-Datei.
+	 */
 	public void writeSettings() {
 		try {
 			props.setProperty("username", encrypt(Variables.getUsername()));
@@ -40,6 +56,9 @@ public class LoadFile {
 		}
 	}
 
+	/**
+	 * Diese Methode liest alle Einstellungen eines Spielers aus einer xml-Datei.
+	 */
 	public void readSettings() {
 		try {
 			FileInputStream fileInput = new FileInputStream(file);
@@ -57,6 +76,11 @@ public class LoadFile {
 		}
 	}
 	
+	/**
+	 * Diese Methode fuegt einen Highscore zur HighscoreDatei hinzu.
+	 * @param hsc Der hinzugefuegte Highscore.
+	 * @param num Die Nummer des Highscores.
+	 */
 	public void addHighscore(Highscore hsc,int num) {
 		try {
 			String temp = String.valueOf(hsc.getSystemtime()+","+hsc.getName()+","+hsc.getNumOfRestCells()+","+hsc.getPoints());
@@ -74,6 +98,10 @@ public class LoadFile {
 		}
 	}
 	
+	/**
+	 * Diese Methode gibt einen Array aller abgespeicherten Highscores zurueck.
+	 * @return Gibt Highscore-Array zurueck.
+	 */
 	public Highscore[] getAllHighscores() {
 		try {
 			FileInputStream fileInput = new FileInputStream(file);
@@ -101,6 +129,11 @@ public class LoadFile {
 		return highscores;
 	}
 	
+	/**
+	 * Diese Methode gibt einen einzelnen Highscore zurueck.
+	 * @param key Key unter dem der Highscore intern abgespeichert ist.
+	 * @return Gibt Highscore zurueck.
+	 */
 	private Highscore getHighscore(String key) {
 		try {
 			String temp = decrypt(props.getProperty(key));

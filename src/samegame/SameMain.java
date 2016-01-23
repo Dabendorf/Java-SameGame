@@ -241,6 +241,7 @@ public class SameMain {
 	/**
 	 * Diese Methode setzt fuer alle nicht-leeren Felder die durch Anklicken erreichbare Punktzahl als ToolTipText.
 	 * Wenn kein Feld mehr eine Punktzahl erreichen koennte, also alle Figuren nur noch einzeln vorkommen, wird das Spiel beendet.
+	 * Die Methode zeigt bei Spielende eine Meldung mit Bestenliste und erreichter Punktzahl an.
 	 */
 	private void showPrognosedPoints() {
 		boolean gameEnd = true;
@@ -281,6 +282,10 @@ public class SameMain {
 		}
 	}
 	
+	/**
+	 * Diese Methode gibt die restliche Zahl von vorhandenen Spielelementen zurueck.
+	 * @return Gibt Restzahl zurueck.
+	 */
 	private int getNumOfRestcells() {
 		int counter = 0;
 		for(int y=0;y<size[1];y++) {
@@ -295,6 +300,7 @@ public class SameMain {
 	
 	/**
 	 * Diese Methode gitb die Anzahl an Punkten zurueck, die beim Klick erreicht wird oder wurde.
+	 * @return Gibt die Punkteprognose zurueck.
 	 */
 	private int getPrognosedPoints() {
 		int num = removableStones.size();
@@ -304,6 +310,7 @@ public class SameMain {
 	
 	/**
 	 * Diese Methode fragt, ob der Spieler eine neue Partie starten oder das Spiel beenden moechte und fuehrt die entsprechende Aktion aus.
+	 * @return Gibt zurueck, ob der Spieler eine neue Partie starten moechte.
 	 */
 	private boolean newGame() {
 		int dialogrestart = JOptionPane.showConfirmDialog(null, lang.restartQuestion, lang.restartTitle, JOptionPane.YES_NO_OPTION);
@@ -489,7 +496,6 @@ public class SameMain {
 				} catch (Exception e1) {
 					lang.fileDamage(lang.pathManual);
 				}
- 				//TODO Anleitung generieren
  			}
  		});
  		itemShowManual.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
