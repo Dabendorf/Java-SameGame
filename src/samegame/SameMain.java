@@ -94,7 +94,8 @@ public class SameMain {
 				gameArr[x][y] = new SameField(new Random().nextInt(5));
 				gameArr[x][y].addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
-						if(!gameArr[x1][y1].isEmpty()) {
+						if(!gameArr[x1][y1].isEmpty() && System.currentTimeMillis()-gameArr[x1][y1].getClickedTime()>1500) {
+							gameArr[x1][y1].setClickedTime(System.currentTimeMillis());
 							findRemovableStones(x1,y1);
 							removeStones();
 							moveDown();

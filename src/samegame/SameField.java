@@ -26,6 +26,9 @@ public class SameField extends JPanel {
 	private String key;
 	/**Aktuell anzuzeigendes Bildobjekt*/
 	private BufferedImage bi;
+	/**Systemzeit wann Feld zuletzt angeklickt wurde*/
+	private long clickedTime = 0L;
+	
 
 	public SameField(int colorNum) {
 		changeColor(colorNum);
@@ -103,5 +106,13 @@ public class SameField extends JPanel {
 		bi = Variables.getPicturecache().get(key);
 		getFigure();
 		this.repaint();
+	}
+
+	public long getClickedTime() {
+		return clickedTime;
+	}
+
+	public void setClickedTime(long clickedTime) {
+		this.clickedTime = clickedTime;
 	}
 }
