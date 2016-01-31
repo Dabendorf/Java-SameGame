@@ -276,6 +276,8 @@ public class SameMain {
 			lb.getFrame1().addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
 					if(!newGame()) {
+						LoadFile lf = new LoadFile(1);
+						lf.writeSettings();
 						System.exit(0);
 					}
 				}
