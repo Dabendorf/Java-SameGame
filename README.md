@@ -3,6 +3,8 @@ This is SameGame, a popular game in which you need to try to remove all tiles on
 
 You remove the tiles by clicking on adjacent tiles with the same colour
 
+![Example file](pictures/example.png)
+
 # Programme itself
 The programme was written by my as a school child. It is still working, but the programme code is partly in German. Its tested and still runs on newer operation systems.
 
