@@ -1,18 +1,15 @@
-# Java-SameGame
-Dieses Programm erzeugt das berühmte Spiel SameGame, bei welchem man durch Anklicken gleichfarbig anliegender Steine so viele Punkte wie möglich macht.
+# SameGame in Java
+This is SameGame, a popular game in which you need to try to remove all tiles on a board while collecting most points
 
-## Programmentwicklung
-Das Programm wurde mit Java in Eclipse auf einem Mac OS X 10.11 Rechner programmiert. Die Quelltextdateien mit passendem Package sind in ein Projekt zu laden und die Ordner sgfiles und pictures entsprechend zu integrieren.
+You remove the tiles by clicking on adjacent tiles with the same colour
 
-## Kompatibilität
-Die höchstmögliche Kompatibilität wird durch Nutzung von Java 8 und ein Mac OS X Betriebssystem erreicht. Es wurde versucht, das Programm auch für Ubuntu, Windows und Java 7 als JRE kompatibel zu machen.
-Etwaige Komplikationen mit anderweitigen Spezifikationen können unter Issues gemeldet werden.
+# Programme itself
+The programme was written by my as a school child. It is still working, but the programme code is partly in German. Its tested and still runs on newer operation systems.
 
-## Spielregeln
-Ziel des Spiels ist es durch Wegklicken von Früchten oder Farbplatten möglichst viele Punkte zu machen. Jedes Element was mindestens ein benachbartes gleichaussehendes Element hat kann weggeklickt werden. Die Punktzahl steigt hierbei entsprechend der Menge an zusammenhängenden Steinen.
+# Rules
+You can click on a tile if at least one of the adjacent four tiles has the same colour. Clicking on it removes all adjacent tiles recursively. Every tile above will fall down, if there are empty columns, everything will move to the left. You get more points if you remove big structures.
 
-## Punktevergabe
-Die Vergabe von Punkten verläuft durch die quadratische Funktion `0.4*num*num + num`, wobei im äußersten Spezialfall in dem alle 240 Felder durch Zufall die gleiche Farbe/Frucht zeigen eine Höchstpunktzahl von 23.280 Punkten erreichbar ist.
+# Points
+The number of points for each operation is `0.4*n*n + n` where `n` is the number of tiles removed. The theoretically highest point sum is 23,280 points for all 240 tiles in the same colour.
 
-## Motivation
-Dieses Spiel wurde im Rahmen des Informatikunterrichts im Jahr 2016 in einem Brandenburger Gymnasium entwickelt. Es dient ausschließlich dem privaten und keinem kommerziellen Zweck.
+An alternative motivation is to try to remove all tiles from the board instead of collecting the most points.
